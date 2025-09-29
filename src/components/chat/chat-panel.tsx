@@ -16,7 +16,7 @@ const ChatPanel = ({ userId }: { userId: string }) => {
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
       <ChatSidebar selectChat={handleChatClick} userId={userId} />
 
-      <div className="flex-1 p-6">
+      <div className="flex-1">
         {selectedChat ? (
           <ChatWindow/>
         ) : (

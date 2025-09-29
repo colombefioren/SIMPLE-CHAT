@@ -4,7 +4,7 @@ const ChatMessage = () => {
         { sender: "Jane", message: "I'm doing well, thanks for asking." },
     ]
   return (
-    <div className="flex flex-col space-y-4">
+    <div className="flex flex-col space-y-6">
       {mockMessages.map((message, index) => (
         <div
           key={index}
