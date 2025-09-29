@@ -15,27 +15,30 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String   @id @default(cuid())
   firstName     String?
   lastName      String?
   name          String?
-  email         String    @unique
-  username      String?   @unique
-  emailVerified Boolean   @default(false)
-  isOnline      Boolean?  @default(false)
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  isOnline      Boolean? @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
 
   sessions Session[]
   accounts Account[]
 
-  messages         Message[]     @relation("UserMessages") 
+  messages         Message[]     @relation("UserMessages")
   groupMemberships GroupMember[]
   createdGroups    Group[]
   ChatMember       ChatMember[]
 
+  username        String?
+  displayUsername String?
+
   @@map("user")
+  @@unique([username])
 }
 
 model Session {
@@ -152,7 +155,5 @@ model Message {
   chat   Chat @relation(fields: [chatId], references: [id])
   sender User @relation("UserMessages", fields: [senderId], references: [id])
 }
-
-
 
 
