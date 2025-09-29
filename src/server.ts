@@ -9,9 +9,7 @@ const app = next({ hostname, dev, port });
 const handler = app.getRequestHandler();
 
 app.prepare().then(() => {
-    
   const server = createServer(handler);
-
 
   const io = new Server(server, {
     cors: {
@@ -22,6 +20,11 @@ app.prepare().then(() => {
 
   io.on("connection", (socket) => {
     console.log("a user connected");
+
+    socket.on("setup", (userId) => {
+      socket.join(userId);
+    });
+
     socket.on("disconnect", () => {
       console.log("user disconnected");
     });
