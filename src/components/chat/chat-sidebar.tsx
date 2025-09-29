@@ -10,8 +10,9 @@ import UserList from "./user-list";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
 import { useSocketStore } from "@/store/useSocketStore";
 
-const ChatSidebar = ({ userId }: { userId: string }) => {
+const ChatSidebar = ({ userId, selectChat }: { userId: string , selectChat : (chat: Chat) => void}) => {
   const socket = useSocketStore((state) => state.socket);
+
 
   useEffect(() => {
     if (!socket) return;
@@ -77,7 +78,7 @@ const ChatSidebar = ({ userId }: { userId: string }) => {
                     No chats found
                   </p>
                 ) : (
-                  <ChatList chats={chats} />
+                  <ChatList selectChat={selectChat} chats={chats} />
                 )}
               </TabsContent>
               <TabsContent value="user" className="h-full">

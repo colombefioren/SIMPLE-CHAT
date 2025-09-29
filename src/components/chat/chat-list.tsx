@@ -3,7 +3,13 @@ import { type Chat } from "../../types/chat";
 import { formatDistanceToNow } from "date-fns";
 import { useUserStore } from "@/store/useUserStore";
 
-const ChatList = ({ chats }: { chats: Chat[] }) => {
+const ChatList = ({
+  chats,
+  selectChat,
+}: {
+  chats: Chat[];
+  selectChat: (chat: Chat) => void;
+}) => {
   const user = useUserStore((state) => state.user);
 
   if (!user) return null;
@@ -18,6 +24,7 @@ const ChatList = ({ chats }: { chats: Chat[] }) => {
 
         return (
           <div
+            onClick={() => selectChat(chat)}
             key={chat.id}
             className="flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
           >
