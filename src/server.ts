@@ -23,14 +23,19 @@ app.prepare().then(() => {
     console.log("a user connected");
 
     socket.on("setup", (userId) => {
-      socket.join(userId);
+      socket.join(`user:${userId}`);
     });
 
     socket.on("create-chat", (chat) => {
-      chat.members.forEach((member : ChatMember) => {
-        io.to(member.userId).emit("open-chat", chat);
-      })
-    })
+      chat.members.forEach((member: ChatMember) => {
+        socket.join(`chat:${chat.id}`);
+        io.to(`user:${member.user.id}`).emit("open-chat", chat);
+      });
+    });
+
+    socket.on("send-message", (message) => {
+      io.to(message.chatId).emit("receive-message", message);
+    });
 
     socket.on("disconnect", () => {
       console.log("user disconnected");

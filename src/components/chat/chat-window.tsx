@@ -4,9 +4,13 @@ import { Input } from "../ui/input";
 import ChatMessage from "./chat-message";
 import { sendMessage } from "@/services/message.service";
 import { toast } from "sonner";
+import { useSocketStore } from "@/store/useSocketStore";
 
 const ChatWindow = ({ chatId }: { chatId: string }) => {
   const [message, setMessage] = React.useState("");
+  const [messageList,setMessageList] = React.useState([]);
+  
+  const socket = useSocketStore((state) => state.socket);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,7 +19,7 @@ const ChatWindow = ({ chatId }: { chatId: string }) => {
 
     try {
       const newMessage = await sendMessage({ chatId, content: message });
-      console.log(newMessage);
+      socket?.emit("send-message", newMessage);
     } catch (error) {
       console.error(error);
       toast.error("Failed to send message");
