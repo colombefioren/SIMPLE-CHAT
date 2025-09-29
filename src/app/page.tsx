@@ -12,7 +12,7 @@ const HomePage = () => {
   const handleClick = async () => {
     await signIn.social({
       provider: "google",
-      callbackURL: "/chat"
+      callbackURL: "/chat",
       fetchOptions: {
         onRequest: () => {
           setIsPending(true);
