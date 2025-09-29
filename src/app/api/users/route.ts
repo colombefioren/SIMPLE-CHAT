@@ -42,7 +42,7 @@ export const GET = async (request: Request) => {
   } catch (error) {
     console.error("Error fetching users:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Error fetching users" },
       { status: 500 }
     );
   }
