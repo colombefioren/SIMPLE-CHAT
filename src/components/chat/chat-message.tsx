@@ -8,7 +8,7 @@ const ChatMessage = ({
   userId: string;
 }) => {
   return (
-    <div className="flex flex-col space-y-6">
+    <div className="flex flex-col space-y-6 overflow-y-scroll h-[80dvh]">
       {messageList.map((message, index) => (
         <div
           key={index}

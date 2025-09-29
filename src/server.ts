@@ -2,6 +2,7 @@ import next from "next";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
 import { ChatMember } from "./types/chat";
+import { sendMessage } from "./services/message.service";
 
 const port = parseInt(process.env.PORT || "3000", 10);
 const dev = process.env.NODE_ENV !== "production";
@@ -32,9 +33,16 @@ app.prepare().then(() => {
         io.to(`user:${member.user.id}`).emit("open-chat", chat);
       });
     });
+    socket.on("join-chat", (chatId) => {
+      console.log("You joined chat", chatId);
+      socket.join(`chat:${chatId}`);
+    });
 
     socket.on("send-message", (message) => {
-      io.to(message.chatId).emit("receive-message", message);
+      io.to(`chat:${message.chatId}`).emit("receive-message", message);
+      sendMessage({ chatId: message.chatId, content: message.content }).catch(
+        (error) => console.error(error)
+      );
     });
 
     socket.on("disconnect", () => {

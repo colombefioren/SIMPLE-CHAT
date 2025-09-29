@@ -12,7 +12,7 @@ export const GET = async (request: Request,{ params }: { params: { chatId: strin
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
-  const { chatId } = params;
+  const { chatId } = await params;
 
   try {
     const messageList = await prisma.chat.findUnique({
@@ -21,7 +21,7 @@ export const GET = async (request: Request,{ params }: { params: { chatId: strin
       },
       include: {
         messages: {
-          orderBy: { createdAt: "desc" },
+          orderBy: { createdAt: "asc" },
           include: {
             sender: true,
           },
