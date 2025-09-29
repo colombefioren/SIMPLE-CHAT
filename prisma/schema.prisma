@@ -4,6 +4,10 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6812215bc0a20946f92b2f6adeb0a95a2c4aec71
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -76,6 +80,10 @@ model Account {
 }
 
 model Verification {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6812215bc0a20946f92b2f6adeb0a95a2c4aec71
   id         String   @id
   identifier String
   value      String
@@ -154,6 +162,10 @@ model Message {
 
   chat   Chat @relation(fields: [chatId], references: [id])
   sender User @relation("UserMessages", fields: [senderId], references: [id])
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6812215bc0a20946f92b2f6adeb0a95a2c4aec71
 }
 
 
