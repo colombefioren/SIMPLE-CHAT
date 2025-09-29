@@ -27,3 +27,10 @@ export type Chat = {
   messages: Message[];
   groupName?: string;
 };
+
+export type ChatMember = {
+  id: string;
+  userId: string;
+  chatId: string;
+  user: User;
+};

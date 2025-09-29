@@ -2,6 +2,7 @@
 
 import { createPrivateChat } from "@/services/chat.service";
 import { getUsers } from "@/services/user.service";
+import { useSocketStore } from "@/store/useSocketStore";
 import { User } from "@/types/user";
 import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
@@ -11,6 +12,7 @@ const UserList = () => {
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
+  const socket = useSocketStore((state) => state.socket);
 
   const fetchUsers = useCallback(async (query: string) => {
     if (!query) {
@@ -35,12 +37,15 @@ const UserList = () => {
     return () => clearTimeout(timeout);
   }, [search, fetchUsers]);
 
-  const handleOpenChat = (selectedUser: User) => {
-    createPrivateChat({ memberIds: [selectedUser.id] })
-      .catch((err) => toast.error(err))
-      .finally(() => {
-        setSearch("");
-      });
+  const handleOpenChat = async (selectedUser: User) => {
+    try {
+      const chat = await createPrivateChat({ memberIds: [selectedUser.id] });
+      socket?.emit("create-chat", chat);
+      setSearch("");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to open chat");
+    }
   };
 
   return (

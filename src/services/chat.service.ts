@@ -6,18 +6,25 @@ export const getAllChats = async () => {
       `${process.env.NEXT_PUBLIC_API_URL}/api/chat/all-chats`
     );
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.error || "Failed to fetch chats");
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      data = null;
     }
-    return res.json();
+
+    if (!res.ok) {
+      throw new Error(data?.error || "Failed to fetch chats");
+    }
+
+    return data;
   } catch (error) {
-    console.error(error);
+    console.error("getAllChats error:", error);
     throw error;
   }
 };
 
-export const createPrivateChat = async (data: CreateChatBody) => {
+export const createPrivateChat = async (payload: CreateChatBody) => {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/chat/private-chat`,
@@ -26,15 +33,20 @@ export const createPrivateChat = async (data: CreateChatBody) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       }
     );
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.error || "Failed to create chat");
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      data = null;
     }
 
-    return res.json();
+    if (!res.ok) {
+      throw new Error(data?.error || "Failed to fetch chats");
+    }
+    return data;
   } catch (error) {
     console.error(error);
     throw error;

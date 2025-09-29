@@ -14,7 +14,21 @@ const ChatSidebar = ({ userId }: { userId: string }) => {
   const socket = useSocketStore((state) => state.socket);
 
   useEffect(() => {
-    socket?.emit("setup", userId);
+    if (!socket) return;
+    socket.emit("setup", userId);
+
+    const handleOpenChat = (newChat: Chat) => {
+      setChats((prev) => {
+        if (prev.find((c) => c.id === newChat.id)) return prev;
+        return [...prev, newChat];
+      });
+    };
+
+    socket.on("open-chat", handleOpenChat);
+
+    return () => {
+      socket.off("open-chat", handleOpenChat);
+    };
   }, [socket, userId]);
 
   const [chats, setChats] = useState<Chat[]>([]);

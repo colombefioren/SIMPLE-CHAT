@@ -1,6 +1,7 @@
 import next from "next";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
+import { ChatMember } from "./types/chat";
 
 const port = parseInt(process.env.PORT || "3000", 10);
 const dev = process.env.NODE_ENV !== "production";
@@ -24,6 +25,12 @@ app.prepare().then(() => {
     socket.on("setup", (userId) => {
       socket.join(userId);
     });
+
+    socket.on("create-chat", (chat) => {
+      chat.members.forEach((member : ChatMember) => {
+        io.to(member.userId).emit("open-chat", chat);
+      })
+    })
 
     socket.on("disconnect", () => {
       console.log("user disconnected");
