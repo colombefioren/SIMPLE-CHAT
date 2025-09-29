@@ -13,8 +13,25 @@ export const POST = async (request: Request) => {
   }
 
   const body: CreateChatBody = await request.json();
+  const memberIds = [session.user.id, ...body.memberIds];
 
   try {
+    const existingChat = prisma.chat.findFirst({
+      where: {
+        members: {
+          every: {
+            userId: {
+              in: memberIds,
+            },
+          },
+        },
+      },
+    });
+
+    if(existingChat){
+      return NextResponse.json(existingChat, { status: 200 });
+    }
+    
     const chat = await prisma.chat.create({
       data: {
         type: body.type,

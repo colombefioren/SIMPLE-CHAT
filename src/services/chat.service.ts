@@ -17,7 +17,7 @@ export const getAllChats = async () => {
   }
 };
 
-export const createChat = async (data: CreateChatBody) => {
+export const createPrivateChat = async (data: CreateChatBody) => {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/chat/private-chat`,

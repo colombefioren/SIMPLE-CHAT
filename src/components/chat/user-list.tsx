@@ -1,9 +1,11 @@
 "use client";
 
+import { createPrivateChat } from "@/services/chat.service";
 import { getUsers } from "@/services/user.service";
 import { User } from "@/types/user";
 import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
+import { toast } from "sonner";
 
 const UserList = () => {
   const [search, setSearch] = useState("");
@@ -33,6 +35,14 @@ const UserList = () => {
     return () => clearTimeout(timeout);
   }, [search, fetchUsers]);
 
+  const handleOpenChat = (selectedUser: User) => {
+    createPrivateChat({ memberIds: [selectedUser.id] })
+      .catch((err) => toast.error(err))
+      .finally(() => {
+        setSearch("");
+      });
+  };
+
   return (
     <div className="max-w-md mx-auto p-4 bg-white shadow rounded-lg">
       <input
@@ -49,6 +59,7 @@ const UserList = () => {
       <ul className="space-y-2">
         {users.map((user) => (
           <li
+            onClick={() => handleOpenChat(user)}
             key={user.id}
             className="flex items-center p-2 rounded hover:bg-gray-100 cursor-pointer transition"
           >
