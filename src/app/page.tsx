@@ -1,4 +1,44 @@
+"use client";
+import { Button } from "@/components/ui/button";
+import { signIn } from "@/lib/auth/auth-client";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 const HomePage = () => {
-  return <div>HomePage</div>;
+  const router = useRouter();
+
+  const [isPending, setIsPending] = useState(false);
+
+  const handleClick = async () => {
+    await signIn.social({
+      provider: "google",
+      callbackURL: "http://localhost:3000/chat",
+      fetchOptions: {
+        onRequest: () => {
+          setIsPending(true);
+        },
+        onResponse: () => {
+          setIsPending(false);
+        },
+        onError: (ctx) => {
+          console.error(ctx.error.message);
+        },
+        onSuccess: () => {
+          router.push("/chat");
+        },
+      },
+    });
+  };
+  return (
+    <div className="flex w-full mt-20 justify-center min-h-screen">
+      <Button
+        disabled={isPending}
+        onClick={handleClick}
+        className="uppercase w-fit text-white bg-red-800 rounded-sm p-2 hover:bg-red-900 cursor-pointer"
+      >
+        lOGIN with GOOGLE
+      </Button>
+    </div>
+  );
 };
 export default HomePage;
