@@ -8,8 +8,15 @@ import ProfileInfo from "../profile/profile-info";
 import ChatList from "./chat-list";
 import UserList from "./user-list";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
+import { useSocketStore } from "@/store/useSocketStore";
 
-const ChatSidebar = () => {
+const ChatSidebar = ({ userId }: { userId: string }) => {
+  const socket = useSocketStore((state) => state.socket);
+
+  useEffect(() => {
+    socket?.emit("setup", userId);
+  }, [socket, userId]);
+
   const [chats, setChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState(true);
 

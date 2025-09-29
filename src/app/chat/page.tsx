@@ -14,7 +14,7 @@ const ChatPage = async () => {
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
-      <ChatSidebar />
+      <ChatSidebar userId={session.user.id}/>
 
       <div className="flex-1 p-6">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
