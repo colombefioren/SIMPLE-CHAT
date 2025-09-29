@@ -2,7 +2,7 @@ import next from "next";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
 import { ChatMember } from "./types/chat";
-import { sendMessage } from "./services/message.service";
+import prisma from "./lib/db/prisma";
 
 const port = parseInt(process.env.PORT || "3000", 10);
 const dev = process.env.NODE_ENV !== "production";
@@ -40,9 +40,15 @@ app.prepare().then(() => {
 
     socket.on("send-message", (message) => {
       io.to(`chat:${message.chatId}`).emit("receive-message", message);
-      sendMessage({ chatId: message.chatId, content: message.content }).catch(
-        (error) => console.error(error)
-      );
+      prisma.message
+        .create({
+          data: {
+            chatId: message.chatId,
+            senderId: message.senderId,
+            content: message.content,
+          },
+        })
+        .catch((error) => console.error(error));
     });
 
     socket.on("disconnect", () => {
