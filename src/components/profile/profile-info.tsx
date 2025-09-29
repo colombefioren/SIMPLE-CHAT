@@ -7,27 +7,36 @@ const ProfileInfo = () => {
   const user = useUserStore((state) => state.user);
   const isLoadingUser = useUserStore((state) => state.isLoadingUser);
 
-  if (!user || isLoadingUser) return <h1>Loading...</h1>;
+  if (!user || isLoadingUser)
+    return (
+      <div className="flex justify-center items-center p-6">
+        <p className="text-gray-500 dark:text-gray-400">Loading...</p>
+      </div>
+    );
 
   return (
-    <div className="flex flex-col justify-center items-center border border-gray-400 w-fit p-6 rounded-sm space-y-4">
-      {user.image && (
+    <div className="flex flex-col items-center p-4 bg-white dark:bg-gray-800 rounded-2xl shadow-md space-y-3">
+      <div className="relative w-20 h-20">
         <Image
-          alt="Profile Pic"
-          width={50}
-          height={50}
-          src={user.image}
-          className="rounded-full"
+          src={user.image ?? "/default-avatar.png"}
+          alt={user.firstName}
+          width={80}
+          height={80}
+          className="rounded-full object-cover border-2 border-indigo-500"
         />
-      )}
-      <h1 className="text-2xl font-semibold">
-        {user.firstName} {user.lastName}
-      </h1>
-      <h2 className="text-lg font-semibold">{user.email}</h2>
-      {user.isOnline && (
-        <h2 className="text-lg text-green-500font-semibold">Online</h2>
-      )}
+        {user.isOnline && (
+          <span className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full" />
+        )}
+      </div>
+
+      <div className="text-center">
+        <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+          {user.firstName} {user.lastName}
+        </h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
+      </div>
     </div>
   );
 };
+
 export default ProfileInfo;
