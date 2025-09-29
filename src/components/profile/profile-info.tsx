@@ -10,12 +10,12 @@ const ProfileInfo = () => {
   if (!user || isLoadingUser) return <h1>Loading...</h1>;
 
   return (
-    <div className="flex space-y-4">
+    <div className="flex flex-col justify-center items-center border border-gray-400 w-fit p-6 rounded-sm space-y-4">
       {user.image && (
         <Image
           alt="Profile Pic"
-          width={25}
-          height={25}
+          width={50}
+          height={50}
           src={user.image}
           className="rounded-full"
         />
