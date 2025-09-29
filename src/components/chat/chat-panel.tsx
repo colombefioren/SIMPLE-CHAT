@@ -2,6 +2,7 @@
 import ChatSidebar from "@/components/chat/chat-sidebar";
 import { Chat } from "@/types/chat";
 import { useState } from "react";
+import ChatWindow from "./chat-window";
 
 const ChatPanel = ({ userId }: { userId: string }) => {
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
@@ -10,7 +11,6 @@ const ChatPanel = ({ userId }: { userId: string }) => {
     setSelectedChat(chat);
   };
 
-  console.log(selectedChat)
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
@@ -18,7 +18,7 @@ const ChatPanel = ({ userId }: { userId: string }) => {
 
       <div className="flex-1 p-6">
         {selectedChat ? (
-          <div>Chat now</div>
+          <ChatWindow/>
         ) : (
           <>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
