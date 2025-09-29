@@ -1,5 +1,6 @@
 "use client";
 
+import { getUsers } from "@/services/user.service";
 import { User } from "@/types/user";
 import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
@@ -14,12 +15,9 @@ const UserList = () => {
       setUsers([]);
       return;
     }
-
     setLoading(true);
     try {
-      const res = await fetch(`/api/users?q=${encodeURIComponent(query)}`);
-      if (!res.ok) throw new Error("Failed to fetch users");
-      const data: User[] = await res.json();
+      const data = await getUsers(query);
       setUsers(data);
     } catch (err) {
       console.error(err);
@@ -44,13 +42,10 @@ const UserList = () => {
         onChange={(e) => setSearch(e.target.value)}
         className="w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-
       {loading && <p className="text-gray-500">Searching...</p>}
-
       {!loading && users.length === 0 && search && (
         <p className="text-gray-400">No users found.</p>
       )}
-
       <ul className="space-y-2">
         {users.map((user) => (
           <li
