@@ -9,13 +9,17 @@ const app = next({ hostname, dev, port });
 const handler = app.getRequestHandler();
 
 app.prepare().then(() => {
+    
   const server = createServer(handler);
+
+
   const io = new Server(server, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: `http://${hostname}:${port}`,
       methods: ["GET", "POST"],
     },
   });
+
   io.on("connection", (socket) => {
     console.log("a user connected");
     socket.on("disconnect", () => {
@@ -24,7 +28,7 @@ app.prepare().then(() => {
   });
 
   server.listen(port, () => {
-    console.log(`> Ready on http://localhost:${port}`);
+    console.log(`> Ready on http://${hostname}:${port}`);
   });
 
   server.on("error", (error) => {
