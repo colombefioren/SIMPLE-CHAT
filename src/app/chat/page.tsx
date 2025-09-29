@@ -1,4 +1,3 @@
-import ProfileInfo from "@/components/profile/profile-info";
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -15,7 +14,6 @@ const ChatPage = async () => {
   return (
     <div>
       ChatPage
-      <ProfileInfo />
     </div>
   );
 };
