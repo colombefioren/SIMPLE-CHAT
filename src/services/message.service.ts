@@ -33,3 +33,25 @@ export const sendMessage = async ({
     throw error;
   }
 };
+
+export const getMessageList = async (chatId: string) => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/chat/${chatId}/message-list`
+    );
+
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      data = null;
+    }
+    if (!res.ok) {
+      throw new Error(data || "Failed to fetch message list");
+    }
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
