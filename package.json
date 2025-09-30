@@ -7,8 +7,7 @@
     "build": "prisma generate && next build",
     "start": "prisma generate && tsx src/server.ts",
     "lint": "eslint",
-  "generate:api": "npx swagger-typescript-api generate -p ./src/specs/openapi.yaml -o ./src/api -n ApiClient.ts"
-
+    "generate:api": "npx swagger-typescript-api generate -p ./src/specs/openapi.yaml -o ./src/api -n ApiClient.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.16.2",
@@ -26,6 +25,7 @@
     "prisma": "^6.16.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-youtube": "^10.1.0",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "sonner": "^2.0.7",

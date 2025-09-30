@@ -3,11 +3,17 @@ import { Button } from "@/components/ui/button";
 import { signIn } from "@/lib/auth/auth-client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useSession } from "../lib/auth/auth-client";
 
 const HomePage = () => {
   const router = useRouter();
+  const session = useSession();
 
   const [isPending, setIsPending] = useState(false);
+
+  if (session) {
+    router.push("/chat");
+  }
 
   const handleClick = async () => {
     await signIn.social({

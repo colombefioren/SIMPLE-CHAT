@@ -5,7 +5,7 @@ import ChatMessage from "./chat-message";
 import { getMessageList } from "@/services/message.service";
 import { toast } from "sonner";
 import { useSocketStore } from "@/store/useSocketStore";
-import { Message } from "@/types/chat";
+import { Message } from "@/generated/prisma";
 
 const ChatWindow = ({ chatId, userId }: { chatId: string; userId: string }) => {
   const [message, setMessage] = useState("");
