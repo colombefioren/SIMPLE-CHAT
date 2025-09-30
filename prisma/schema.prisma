@@ -76,6 +76,7 @@ model Account {
 }
 
 model Verification {
+
   id         String   @id
   identifier String
   value      String
@@ -154,6 +155,7 @@ model Message {
 
   chat   Chat @relation(fields: [chatId], references: [id])
   sender User @relation("UserMessages", fields: [senderId], references: [id])
+
 }
 
 

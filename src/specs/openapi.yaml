@@ -3,7 +3,7 @@ info:
   title: Simple Chat
   version: 1.0.0
 paths:
-  /api/chat/{chatId}/message-list:
+  /chat/{chatId}/message-list:
     get:
       summary: Get message list for a chat
       parameters:
@@ -48,7 +48,7 @@ paths:
           description: Unauthorized
         "500":
           description: Internal server error
-  /api/chat/all-chats:
+  /chat/all-chats:
     get:
       summary: Get all chats for authenticated user
       responses:
@@ -105,7 +105,7 @@ paths:
           description: Unauthorized
         "500":
           description: Internal server error
-  /api/chat/private-chat:
+  /chat/private-chat:
     post:
       summary: Create or get existing private chat
       requestBody:
@@ -159,7 +159,7 @@ paths:
           description: Unauthorized
         "500":
           description: Internal server error
-  /api/chat/send-message:
+  /chat/send-message:
     post:
       summary: Send a message to a chat
       requestBody:
@@ -195,7 +195,7 @@ paths:
           description: Unauthorized
         "500":
           description: Internal server error
-  /api/chats:
+  /chats:
     get:
       summary: Get all chats for authenticated user
       responses:
@@ -252,7 +252,7 @@ paths:
           description: Unauthorized
         "500":
           description: Internal server error
-  /api/users:
+  /users:
     get:
       summary: Search users
       parameters:

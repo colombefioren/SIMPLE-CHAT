@@ -1,9 +1,9 @@
-import { api } from "@/lib/api";
+import api  from "@/lib/api";
 import { CreateChatBody } from "@/types/chat";
 
 export const getAllChats = async () => {
   try {
-    const res = await api.chatsList();
+    const res = await api.chats.chatsList();
 
     let data;
     try {
@@ -25,7 +25,7 @@ export const getAllChats = async () => {
 
 export const createPrivateChat = async (payload: CreateChatBody) => {
   try {
-    const res = await api.chatPrivateChatCreate(payload);
+    const res = await api.chat.privateChatCreate(payload);
     return res.data;
   } catch (error) {
     console.error(error);
