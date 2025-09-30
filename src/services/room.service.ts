@@ -1,5 +1,5 @@
 import api  from "@/lib/api";
-import { CreateRoomBody } from "@/types/room";
+import { CreateRoomBody, Room } from "@/types/room";
 
 export const getAllRooms = async () => {
   try {
@@ -16,7 +16,7 @@ export const getAllRooms = async () => {
       throw new Error(data?.error || "Failed to fetch rooms");
     }
 
-    return data;
+    return data as Room[];
   } catch (error) {
     console.error("getAllRooms error:", error);
     throw error;
@@ -26,7 +26,7 @@ export const getAllRooms = async () => {
 export const createRoom = async (payload: CreateRoomBody) => {
   try {
     const res = await api.rooms.roomsCreate(payload);
-    return res.data;
+    return res.data as Room;
   } catch (error) {
     console.error(error);
     throw error;

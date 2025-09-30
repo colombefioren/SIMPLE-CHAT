@@ -40,7 +40,11 @@ export const POST = async (request: Request) => {
   }
 
   const body = await request.json();
-  const { name, chatId } = body;
+  const { name, chatId, membersId } = body;
+  const membersIdWithCreator: string[] = [
+    ...(membersId ?? []),
+    session.user.id,
+  ];
 
   try {
     const room = await prisma.room.create({
@@ -48,6 +52,9 @@ export const POST = async (request: Request) => {
         name,
         chatId,
         createdBy: session.user.id,
+        members: {
+          create: membersIdWithCreator.map((id: string) => ({ userId: id })),
+        },
       },
     });
     return NextResponse.json(room);
