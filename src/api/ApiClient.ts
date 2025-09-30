@@ -266,12 +266,74 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title Simple Chat
+ * @title Chat and Rooms API
  * @version 1.0.0
  */
 export class Api<
   SecurityDataType extends unknown,
 > extends HttpClient<SecurityDataType> {
+  rooms = {
+    /**
+     * No description
+     *
+     * @name RoomsList
+     * @summary Get all rooms
+     * @request GET:/rooms
+     */
+    roomsList: (params: RequestParams = {}) =>
+      this.request<
+        {
+          id?: string;
+          name?: string;
+          createdBy?: string;
+          chat?: object;
+          members?: {
+            user?: {
+              id?: string;
+              name?: string;
+              username?: string;
+            };
+          }[];
+        }[],
+        void
+      >({
+        path: `/rooms`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name RoomsCreate
+     * @summary Create a new room
+     * @request POST:/rooms
+     */
+    roomsCreate: (
+      data: {
+        name: string;
+        chatId: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        {
+          id?: string;
+          name?: string;
+          createdBy?: string;
+          chatId?: string;
+        },
+        void
+      >({
+        path: `/rooms`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
   chat = {
     /**
      * No description
