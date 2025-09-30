@@ -1,15 +1,11 @@
+import { api } from "@/lib/api";
+
 export const getUsers = async (query: string) => {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/users?q=${query}`
-    );
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.error || "Failed to fetch users");
-    }
-    return res.json();
+    const res = await api.usersList({ q: query }); // pass query as object
+    return res.data;
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching users:", error);
     throw error;
   }
 };

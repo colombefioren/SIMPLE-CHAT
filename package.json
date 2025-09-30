@@ -6,7 +6,9 @@
     "dev": "prisma generate && tsx src/server.ts --turbopack",
     "build": "prisma generate && next build",
     "start": "prisma generate && tsx src/server.ts",
-    "lint": "eslint"
+    "lint": "eslint",
+  "generate:api": "npx swagger-typescript-api generate -p ./src/specs/openapi.yaml -o ./src/api -n ApiClient.ts"
+
   },
   "dependencies": {
     "@prisma/client": "^6.16.2",
