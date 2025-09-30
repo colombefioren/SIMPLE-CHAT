@@ -6,12 +6,15 @@
     "dev": "prisma generate && tsx src/server.ts --turbopack",
     "build": "prisma generate && next build",
     "start": "prisma generate && tsx src/server.ts",
-    "lint": "eslint"
+    "lint": "eslint",
+  "generate:api": "npx swagger-typescript-api generate -p ./src/specs/openapi.yaml -o ./src/api -n ApiClient.ts"
+
   },
   "dependencies": {
     "@prisma/client": "^6.16.2",
     "@prisma/extension-accelerate": "^2.0.2",
     "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-tabs": "^1.1.13",
     "@supabase/supabase-js": "^2.58.0",
     "better-auth": "^1.3.23",
     "class-variance-authority": "^0.7.1",

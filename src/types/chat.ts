@@ -23,7 +23,14 @@ export type Message = {
 export type Chat = {
   id: string;
   type: ChatType;
-  members: User[];
+  members: { user: User }[];
   messages: Message[];
   groupName?: string;
+};
+
+export type ChatMember = {
+  id: string;
+  userId: string;
+  chatId: string;
+  user: User;
 };

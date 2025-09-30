@@ -13,33 +13,49 @@ export const POST = async (request: Request) => {
   }
 
   const body: CreateChatBody = await request.json();
+  const memberIds = [session.user.id, ...body.memberIds];
 
   try {
-    const chat = await prisma.chat.create({
-      data: {
-        type: body.type,
+    const existingChat = await prisma.chat.findFirst({
+      where: {
         members: {
-          create: [
-            {
-              userId: session.user.id,
+          every: {
+            userId: {
+              in: memberIds,
             },
-            ...body.memberIds.map((id) => ({
-              userId: id,
-            })),
-          ],
-        },
-      },
-      include: {
-        members: {
-          include: {
-            user: true,
           },
         },
-        messages: true,
       },
     });
 
-    return NextResponse.json(chat, { status: 201 });
+    if (!existingChat) {
+      const chat = await prisma.chat.create({
+        data: {
+          type: body.type,
+          members: {
+            create: [
+              {
+                userId: session.user.id,
+              },
+              ...body.memberIds.map((id) => ({
+                userId: id,
+              })),
+            ],
+          },
+        },
+        include: {
+          members: {
+            include: {
+              user: true,
+            },
+          },
+          messages: true,
+        },
+      });
+
+      return NextResponse.json(chat, { status: 201 });
+    }
+    return NextResponse.json(existingChat, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
