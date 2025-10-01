@@ -3,6 +3,7 @@ import { createServer } from "node:http";
 import { Server } from "socket.io";
 import { ChatMember } from "./types/chat";
 import prisma from "./lib/db/prisma";
+import { RoomMember } from "./generated/prisma";
 
 const port = parseInt(process.env.PORT || "3000", 10);
 const dev = process.env.NODE_ENV !== "production";
@@ -49,6 +50,17 @@ app.prepare().then(() => {
           },
         })
         .catch((error) => console.error(error));
+    });
+
+    socket.on("create-room", (room) => {
+      room.members.forEach((member: RoomMember) => {
+        io.to(`user:${member.userId}`).emit("new-room", room);
+      });
+    })
+
+    socket.on("join-room", (roomId) => {
+      console.log("You joined room", roomId);
+      socket.join(`room:${roomId}`);
     });
 
     socket.on("disconnect", () => {

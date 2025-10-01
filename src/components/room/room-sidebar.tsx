@@ -9,10 +9,12 @@ import { toast } from "sonner";
 import { Button } from "../ui/button";
 import CreateRoomModal from "./create-room-modal";
 import { createPrivateChat } from "@/services/chat.service";
+import { useSocketStore } from "@/store/useSocketStore";
 
-const RoomSidebar = () => {
+const RoomSidebar = ({ selectRoom }: { selectRoom: (room: Room) => void }) => {
   const [roomList, setRoomList] = useState<Room[]>([]);
-  const [openCreateRoomModal,setOpenCreateRoomModal] = useState(false);
+  const [openCreateRoomModal, setOpenCreateRoomModal] = useState(false);
+  const socket = useSocketStore((state) => state.socket);
 
   useEffect(() => {
     getAllRooms()
@@ -20,11 +22,27 @@ const RoomSidebar = () => {
       .catch(() => toast.error("Failed to fetch existing rooms"));
   }, []);
 
-  const handleCreateRoom = async ({name,memberIds}: {name: string,memberIds: string[]}) => {
+  useEffect(() => {
+    socket?.on("new-room", (room: Room) => {
+      setRoomList((prev) => [...prev, room]);
+    });
+  }, [socket]);
+
+  const handleCreateRoom = async ({
+    name,
+    memberIds,
+  }: {
+    name: string;
+    memberIds: string[];
+  }) => {
     try {
-      const chat = await createPrivateChat({memberIds});
-      const room = await createRoom({name,chatId: chat.id,membersId : memberIds});
-      setRoomList([...roomList, room]);
+      const chat = await createPrivateChat({ memberIds });
+      const room = await createRoom({
+        name,
+        chatId: chat.id,
+        membersId: memberIds,
+      });
+      socket?.emit("create-room", room);
       toast.success(`Room "${name}" created successfully!`);
     } catch (error) {
       console.error(error);
@@ -32,11 +50,16 @@ const RoomSidebar = () => {
     }
   };
 
-
   return (
     <div className="flex flex-col w-80 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 shadow-lg">
-      {openCreateRoomModal && <div className="absolute flex items-center justify-center top-0 left-0 w-full h-full bg-gray-500/50">
-        <CreateRoomModal createRoom={handleCreateRoom} onClose={() => setOpenCreateRoomModal(false)}/></div>}
+      {openCreateRoomModal && (
+        <div className="absolute flex items-center justify-center top-0 left-0 w-full h-full bg-gray-500/50">
+          <CreateRoomModal
+            createRoom={handleCreateRoom}
+            onClose={() => setOpenCreateRoomModal(false)}
+          />
+        </div>
+      )}
       <div className="p-6">
         <ProfileInfo />
       </div>
@@ -44,9 +67,11 @@ const RoomSidebar = () => {
       <div className="border-t border-gray-200 dark:border-gray-800 my-2" />
 
       <div className="flex-1 flex flex-col px-3">
-        <Button onClick={()=> setOpenCreateRoomModal(true)} className="mb-3">Create a Room</Button>
+        <Button onClick={() => setOpenCreateRoomModal(true)} className="mb-3">
+          Create a Room
+        </Button>
         {roomList.length > 0 ? (
-          <RoomList roomList={roomList} />
+          <RoomList selectRoom={selectRoom} roomList={roomList} />
         ) : (
           <div className="flex-1 overflow-y-auto">You have no rooms yet!</div>
         )}
