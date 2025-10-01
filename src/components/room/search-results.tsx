@@ -1,4 +1,5 @@
 import { YouTubeSearchResult } from "@/services/youtube-search.service";
+import Image from "next/image";
 
 interface SearchResultsProps {
   results: YouTubeSearchResult[];
@@ -18,14 +19,18 @@ const SearchResults = ({ results, onSelectVideo }: SearchResultsProps) => {
           className="flex items-center space-x-3 p-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer transition-colors"
           onClick={() => onSelectVideo(item.id.videoId)}
         >
-          <img
+          <Image
             src={item.snippet.thumbnails.default.url}
             alt={item.snippet.title}
-            className="w-16 h-12 object-cover rounded flex-shrink-0"
+            width={64}
+            height={48} 
+            className="object-cover rounded flex-shrink-0"
           />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium truncate">{item.snippet.title}</p>
-            <p className="text-xs text-gray-500 truncate">{item.snippet.description}</p>
+            <p className="text-xs text-gray-500 truncate">
+              {item.snippet.description}
+            </p>
           </div>
         </div>
       ))}
