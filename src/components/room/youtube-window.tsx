@@ -47,6 +47,10 @@ const YoutubeWindow = ({ room }: { room: Room }) => {
     setSearchQuery("");
   };
 
+  if (!user) {
+    return <h1>Loading...</h1>;
+  }
+
   return (
     <div className="flex flex-col justify-between space-y-4">
       {isHost && (
@@ -70,7 +74,7 @@ const YoutubeWindow = ({ room }: { room: Room }) => {
           />
         </>
       )}
-      <YoutubePlayer videoId={videoId} />
+      <YoutubePlayer userId={user.id} roomId={room.id} videoId={videoId} />
     </div>
   );
 };

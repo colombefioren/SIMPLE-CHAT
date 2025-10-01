@@ -64,6 +64,10 @@ app.prepare().then(() => {
       socket.join(`room:${roomId}`);
     });
 
+    socket.on("update-video-state", (videoState) => {
+      io.to(`room:${videoState.roomId}`).emit("new-video-state", videoState);
+    });
+
     socket.on("disconnect", () => {
       console.log("user disconnected");
     });

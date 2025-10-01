@@ -1,9 +1,30 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Youtube, { YouTubeEvent } from "react-youtube";
 import { VideoState } from "@/types/youtube";
+import { useSocketStore } from "@/store/useSocketStore";
 
-const YoutubePlayer = ({ videoId }: { videoId: string }) => {
+const YoutubePlayer = ({
+  videoId,
+  roomId,
+  userId,
+}: {
+  videoId: string;
+  roomId: string;
+  userId: string;
+}) => {
   const [videoState, setVideoState] = useState<VideoState | null>(null);
+  const socket = useSocketStore((state) => state.socket);
+
+  useEffect(() => {
+    socket?.on("new-video-state", (data: VideoState) => {
+      if (data.lastUpdatedBy === userId) return;
+      setVideoState(data);
+    });
+  }, [socket, userId]);
+
+  useEffect(() => {
+    socket?.emit("update-video-state", videoState);
+  }, [videoState, socket]);
 
   const validVideoId =
     videoId && videoId.length === 11 ? videoId : "4TWR90KJl84";
@@ -20,6 +41,8 @@ const YoutubePlayer = ({ videoId }: { videoId: string }) => {
       currentTime: playerRef.current?.getCurrentTime(),
       volume: playerRef.current?.getVolume(),
       playbackRate: playerRef.current?.getPlaybackRate(),
+      roomId,
+      lastUpdatedBy: userId,
     });
   };
 
@@ -39,6 +62,8 @@ const YoutubePlayer = ({ videoId }: { videoId: string }) => {
       currentTime: player.getCurrentTime(),
       volume: player.getVolume(),
       playbackRate: player.getPlaybackRate(),
+      roomId,
+      lastUpdatedBy: userId,
     }));
   };
 

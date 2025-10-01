@@ -4,4 +4,6 @@ export type VideoState = {
   currentTime?: number;
   volume?: number;
   playbackRate?: number;
+  roomId: string;
+  lastUpdatedBy: string;
 };
