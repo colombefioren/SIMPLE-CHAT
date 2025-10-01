@@ -14,7 +14,7 @@ export const GET = async () => {
 
   try {
     const rooms = await prisma.room.findMany({
-      where:{
+      where: {
         members: {
           some: {
             userId: session.user.id,
@@ -62,6 +62,14 @@ export const POST = async (request: Request) => {
         members: {
           create: membersIdWithCreator.map((id: string) => ({ userId: id })),
         },
+      },
+      include: {
+        members: {
+          include: {
+            user: true,
+          },
+        },
+        chat: true,
       },
     });
     return NextResponse.json(room);

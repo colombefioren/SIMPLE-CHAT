@@ -18,3 +18,17 @@ export type Room = {
     user: User;
   }[];
 };
+
+export type RoomMember = {
+  id: string;
+  userId: string;
+  roomId: string;
+  role: RoomRole;
+  joinedAt: Date;
+  user: User;
+};
+
+enum RoomRole {
+  ADMIN = "HOST",
+  MEMBER = "MEMBER",
+}

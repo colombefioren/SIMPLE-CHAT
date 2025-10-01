@@ -10,17 +10,24 @@ import { Button } from "../ui/button";
 import CreateRoomModal from "./create-room-modal";
 import { createPrivateChat } from "@/services/chat.service";
 import { useSocketStore } from "@/store/useSocketStore";
+import { useUserStore } from "@/store/useUserStore";
 
 const RoomSidebar = ({ selectRoom }: { selectRoom: (room: Room) => void }) => {
   const [roomList, setRoomList] = useState<Room[]>([]);
   const [openCreateRoomModal, setOpenCreateRoomModal] = useState(false);
   const socket = useSocketStore((state) => state.socket);
+  const user = useUserStore((state) => state.user);
 
   useEffect(() => {
     getAllRooms()
       .then(setRoomList)
       .catch(() => toast.error("Failed to fetch existing rooms"));
   }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.emit("setup", user?.id);
+  }, [socket, user?.id]);
 
   useEffect(() => {
     socket?.on("new-room", (room: Room) => {
