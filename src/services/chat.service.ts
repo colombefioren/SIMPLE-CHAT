@@ -23,6 +23,7 @@ export const getAllChats = async () => {
   }
 };
 
+
 export const createPrivateChat = async (payload: CreateChatBody) => {
   try {
     const res = await api.chat.privateChatCreate(payload);

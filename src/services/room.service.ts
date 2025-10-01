@@ -1,4 +1,4 @@
-import api  from "@/lib/api";
+import api from "@/lib/api";
 import { CreateRoomBody, Room } from "@/types/room";
 
 export const getAllRooms = async () => {
@@ -16,7 +16,7 @@ export const getAllRooms = async () => {
       throw new Error(data?.error || "Failed to fetch rooms");
     }
 
-    return data as Room[];
+    return data;
   } catch (error) {
     console.error("getAllRooms error:", error);
     throw error;
