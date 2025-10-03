@@ -15,7 +15,7 @@ const ChatWindow = ({ chatId, userId }: { chatId: string; userId: string }) => {
     const fetchMessageList = async () => {
       try {
         const chatData = await getMessageList(chatId);
-        setMessageList(chatData.messages);
+        setMessageList(chatData);
       } catch (error) {
         console.error(error);
         toast.error("Failed to fetch messages");

@@ -266,21 +266,83 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title Simple Chat
+ * @title Chat and Rooms API
  * @version 1.0.0
  */
 export class Api<
   SecurityDataType extends unknown,
 > extends HttpClient<SecurityDataType> {
-  api = {
+  rooms = {
     /**
      * No description
      *
-     * @name ChatMessageListList
-     * @summary Get message list for a chat
-     * @request GET:/api/chat/{chatId}/message-list
+     * @name RoomsList
+     * @summary Get all rooms
+     * @request GET:/rooms
      */
-    chatMessageListList: (chatId: string, params: RequestParams = {}) =>
+    roomsList: (params: RequestParams = {}) =>
+      this.request<
+        {
+          id?: string;
+          name?: string;
+          createdBy?: string;
+          chat?: object;
+          members?: {
+            user?: {
+              id?: string;
+              name?: string;
+              username?: string;
+            };
+          }[];
+        }[],
+        void
+      >({
+        path: `/rooms`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name RoomsCreate
+     * @summary Create a new room
+     * @request POST:/rooms
+     */
+    roomsCreate: (
+      data: {
+        name: string;
+        chatId: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<
+        {
+          id?: string;
+          name?: string;
+          createdBy?: string;
+          chatId?: string;
+        },
+        void
+      >({
+        path: `/rooms`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
+  chat = {
+    /**
+     * No description
+     *
+     * @name MessageListList
+     * @summary Get message list for a chat
+     * @request GET:/chat/{chatId}/message-list
+     */
+    messageListList: (chatId: string, params: RequestParams = {}) =>
       this.request<
         {
           id?: string;
@@ -298,7 +360,7 @@ export class Api<
         },
         void
       >({
-        path: `/api/chat/${chatId}/message-list`,
+        path: `/chat/${chatId}/message-list`,
         method: "GET",
         format: "json",
         ...params,
@@ -307,11 +369,11 @@ export class Api<
     /**
      * No description
      *
-     * @name ChatAllChatsList
+     * @name AllChatsList
      * @summary Get all chats for authenticated user
-     * @request GET:/api/chat/all-chats
+     * @request GET:/chat/all-chats
      */
-    chatAllChatsList: (params: RequestParams = {}) =>
+    allChatsList: (params: RequestParams = {}) =>
       this.request<
         {
           id?: string;
@@ -337,7 +399,7 @@ export class Api<
         }[],
         void
       >({
-        path: `/api/chat/all-chats`,
+        path: `/chat/all-chats`,
         method: "GET",
         format: "json",
         ...params,
@@ -346,11 +408,11 @@ export class Api<
     /**
      * No description
      *
-     * @name ChatPrivateChatCreate
+     * @name PrivateChatCreate
      * @summary Create or get existing private chat
-     * @request POST:/api/chat/private-chat
+     * @request POST:/chat/private-chat
      */
-    chatPrivateChatCreate: (
+    privateChatCreate: (
       data: {
         type?: string;
         memberIds?: string[];
@@ -358,7 +420,7 @@ export class Api<
       params: RequestParams = {},
     ) =>
       this.request<object, void>({
-        path: `/api/chat/private-chat`,
+        path: `/chat/private-chat`,
         method: "POST",
         body: data,
         type: ContentType.Json,
@@ -369,11 +431,11 @@ export class Api<
     /**
      * No description
      *
-     * @name ChatSendMessageCreate
+     * @name SendMessageCreate
      * @summary Send a message to a chat
-     * @request POST:/api/chat/send-message
+     * @request POST:/chat/send-message
      */
-    chatSendMessageCreate: (
+    sendMessageCreate: (
       data: {
         chatId?: string;
         content?: string;
@@ -390,20 +452,21 @@ export class Api<
         },
         void
       >({
-        path: `/api/chat/send-message`,
+        path: `/chat/send-message`,
         method: "POST",
         body: data,
         type: ContentType.Json,
         format: "json",
         ...params,
       }),
-
+  };
+  chats = {
     /**
      * No description
      *
      * @name ChatsList
      * @summary Get all chats for authenticated user
-     * @request GET:/api/chats
+     * @request GET:/chats
      */
     chatsList: (params: RequestParams = {}) =>
       this.request<
@@ -431,18 +494,19 @@ export class Api<
         }[],
         void
       >({
-        path: `/api/chats`,
+        path: `/chats`,
         method: "GET",
         format: "json",
         ...params,
       }),
-
+  };
+  users = {
     /**
      * No description
      *
      * @name UsersList
      * @summary Search users
-     * @request GET:/api/users
+     * @request GET:/users
      */
     usersList: (
       query?: {
@@ -458,7 +522,7 @@ export class Api<
         }[],
         void
       >({
-        path: `/api/users`,
+        path: `/users`,
         method: "GET",
         query: query,
         format: "json",

@@ -36,9 +36,10 @@ model User {
 
   username        String?
   displayUsername String?
+  RoomMember      RoomMember[]
 
-  @@map("user")
   @@unique([username])
+  @@map("user")
 }
 
 model Session {
@@ -95,6 +96,7 @@ model Chat {
   members  ChatMember[]
   messages Message[]
   group    Group?
+  Room     Room?
 }
 
 enum ChatType {
@@ -156,4 +158,30 @@ model Message {
   sender User @relation("UserMessages", fields: [senderId], references: [id])
 }
 
+model Room {
+  id        String   @id @default(cuid())
+  name      String
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  chat    Chat?        @relation(fields: [chatId], references: [id])
+  chatId  String?      @unique
+  members RoomMember[]
+}
+
+model RoomMember {
+  id       String   @id @default(cuid())
+  userId   String
+  roomId   String
+  role     RoomRole @default(MEMBER)
+  joinedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  room Room @relation(fields: [roomId], references: [id])
+}
+
+enum RoomRole {
+  HOST
+  MEMBER
+}
