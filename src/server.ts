@@ -65,6 +65,7 @@ app.prepare().then(() => {
     });
 
     socket.on("update-video-state", (videoState) => {
+      if (!videoState || !videoState.roomId) return;
       io.to(`room:${videoState.roomId}`).emit("new-video-state", videoState);
     });
 

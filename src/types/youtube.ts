@@ -6,4 +6,5 @@ export type VideoState = {
   playbackRate?: number;
   roomId: string;
   lastUpdatedBy: string;
+  lastUpdatedAt: Date;
 };
