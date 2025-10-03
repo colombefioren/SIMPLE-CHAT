@@ -34,4 +34,3 @@ export type ChatMember = {
   chatId: string;
   user: User;
 };
-
