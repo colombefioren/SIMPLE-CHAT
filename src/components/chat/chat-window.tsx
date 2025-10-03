@@ -5,7 +5,7 @@ import ChatMessage from "./chat-message";
 import { getMessageList } from "@/services/message.service";
 import { toast } from "sonner";
 import { useSocketStore } from "@/store/useSocketStore";
-import { Message } from "@/generated/prisma";
+import { Message } from "@/types/chat";
 
 const ChatWindow = ({ chatId, userId }: { chatId: string; userId: string }) => {
   const [message, setMessage] = useState("");
@@ -15,7 +15,7 @@ const ChatWindow = ({ chatId, userId }: { chatId: string; userId: string }) => {
     const fetchMessageList = async () => {
       try {
         const chatData = await getMessageList(chatId);
-        setMessageList(chatData.messages);
+        setMessageList(chatData);
       } catch (error) {
         console.error(error);
         toast.error("Failed to fetch messages");

@@ -7,6 +7,11 @@ const ChatMessage = ({
   messageList: Message[];
   userId: string;
 }) => {
+  if (messageList.length === 0 && !messageList) {
+    return;
+  }
+  console.log(messageList);
+
   return (
     <div className="flex flex-col space-y-6 overflow-y-scroll h-[80dvh]">
       {messageList.map((message, index) => (

@@ -1,4 +1,5 @@
-import  api  from "@/lib/api";
+import api from "@/lib/api";
+import { Message } from "@/types/chat";
 
 export const sendMessage = async ({
   chatId,
@@ -19,7 +20,16 @@ export const sendMessage = async ({
 export const getMessageList = async (chatId: string) => {
   try {
     const res = await api.chat.messageListList(chatId);
-    return res.data;
+    const apiMessages = res.data.messages || [];
+
+    const messages = apiMessages.map((m) => ({
+      id: m.id!,
+      content: m.content!,
+      createdAt: m.createdAt ? new Date(m.createdAt) : new Date(),
+      senderId: m.sender?.id ?? "",
+    }));
+
+    return messages as Message[];
   } catch (error) {
     console.error("Error fetching message list:", error);
     throw error;

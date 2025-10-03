@@ -11,6 +11,7 @@ import {
   YouTubeSearchResult,
 } from "@/services/youtube-search.service";
 import SearchResults from "./search-results";
+import ChatWindow from "../chat/chat-window";
 
 const YoutubeWindow = ({ room }: { room: Room }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -75,6 +76,7 @@ const YoutubeWindow = ({ room }: { room: Room }) => {
         </>
       )}
       <YoutubePlayer userId={user.id} roomId={room.id} videoId={videoId} />
+      <ChatWindow userId={user.id} chatId={room.chatId ?? ""} />
     </div>
   );
 };
